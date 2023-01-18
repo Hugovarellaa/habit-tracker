@@ -5,8 +5,7 @@ import {
   Inter_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/inter";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { Loading } from "./src/components/Loading";
 
 export default function App() {
@@ -26,7 +25,11 @@ export default function App() {
       <Text style={styles.text}>
         Open up App.tsx to start working on your app!
       </Text>
-      <StatusBar style="auto" />
+      <StatusBar
+        translucent
+        barStyle="light-content"
+        backgroundColor="transparent"
+      />
     </View>
   );
 }
