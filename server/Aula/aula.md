@@ -10,7 +10,7 @@
 
 ## Front-end
 
-- [] Fundamentos do React
+- [] Fundamentos do React - Vitejs
 - [] Criação do projeto
 - [] Componentes e propriedades
 - [] Configurando Tailwind CSS
