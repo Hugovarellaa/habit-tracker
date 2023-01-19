@@ -1,15 +1,11 @@
 import cors from "@fastify/cors";
-import { PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
+import { AppRoutes } from "./routes";
 
 const app = Fastify();
-const prisma = new PrismaClient();
-app.register(cors);
 
-app.get("/", (req, res) => {
-  const habit = prisma.habit.findMany();
-  return habit;
-});
+app.register(cors);
+app.register(AppRoutes);
 
 app
   .listen({

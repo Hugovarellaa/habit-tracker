@@ -21,7 +21,7 @@ model Habit {
   created_at DateTime
 
   dayHabits DayHabit[]
-  weekdays  HabitWeekdays[]
+  weekDays  HabitWeekdays[]
 
   @@map("habits")
 }
