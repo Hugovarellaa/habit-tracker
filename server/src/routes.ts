@@ -75,4 +75,84 @@ export async function AppRoutes(app: FastifyInstance) {
       completedHabits,
     };
   });
+
+  app.patch("/habits/:id/toggle", async (request, response) => {
+    const toggleHabitsParams = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id } = toggleHabitsParams.parse(request.params);
+
+    const today = dayjs().startOf("day").toDate();
+
+    let day = await prisma.day.findUnique({
+      where: {
+        date: today,
+      },
+    });
+
+    if (!day) {
+      day = await prisma.day.create({
+        data: {
+          date: today,
+        },
+      });
+    }
+
+    const dayHabit = await prisma.dayHabit.findUnique({
+      where: {
+        day_id_habit_id: {
+          day_id: day.id,
+          habit_id: id,
+        },
+      },
+    });
+
+    if (dayHabit) {
+      await prisma.dayHabit.delete({
+        where: {
+          id: dayHabit.id,
+        },
+      });
+    } else {
+      await prisma.dayHabit.create({
+        data: {
+          day_id: day.id,
+          habit_id: id,
+        },
+      });
+    }
+  });
+
+  app.get("/summary", async (request, response) => {
+    // retorna resumo
+    // [ {date: 19/01, amount: 5, completed: 1 } , {date: 20/01, amount: 2, completed: 2 } ]
+    // Query mais complexa, mais condições, relacionamentos => SQL na mao (RAW)
+    // Prisma ORM: Quando começamos a escrever RAW SQL na mao, o orm passa a funciona somente no banco de dados especifico =>  Nesse caso aqui no SQLite
+
+    const summary = await prisma.$queryRaw`
+      SELECT 
+        D.id, 
+        D.date,
+        (
+          SELECT 
+            cast (count(*) as float)
+          FROM day_habits DH
+          WHERE DH.day_id = D.id
+        ) as completed,
+        (
+          SELECT 
+            cast(count(*) as float)
+          FROM habit_week_days HWD
+          JOIN habits H
+            ON H.id = HWD.habit_id
+          WHERE 
+            HWD.week_day = cast(strftime('%w', D.date/1000.0, 'unixepoch') as int)
+            AND H.created_at <= D.date
+        ) as amount
+      FROM days D 
+    `;
+
+    return summary;
+  });
 }
