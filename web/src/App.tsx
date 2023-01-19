@@ -1,6 +1,6 @@
-import { Habit } from "./components/Habit";
-import { Header } from "./components/Header";
-import "./styles/main.css";
+import { Habit } from './components/Habit'
+import { Header } from './components/Header'
+import './styles/main.css'
 
 export function App() {
   return (
@@ -10,5 +10,5 @@ export function App() {
       </div>
       <Habit />
     </div>
-  );
+  )
 }

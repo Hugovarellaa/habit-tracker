@@ -1,5 +1,5 @@
-import { Plus } from "phosphor-react";
-import logoImg from "../assets/logo.svg";
+import { Plus } from 'phosphor-react'
+import logoImg from '../assets/logo.svg'
 
 export function Header() {
   return (
@@ -22,5 +22,5 @@ export function Header() {
         Novo habito
       </button>
     </div>
-  );
+  )
 }
