@@ -1,8 +1,13 @@
+import { PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
 
 const app = Fastify();
+const prisma = new PrismaClient();
 
-app.get("/", (req, res) => {});
+app.get("/", (req, res) => {
+  const habit = prisma.habit.findMany();
+  return habit;
+});
 
 app
   .listen({
