@@ -38,7 +38,8 @@ export async function AppRoutes(app: FastifyInstance) {
 
     // localhost:3333/day?date=yyyy-MM-dd
     const { date } = getDayParams.parse(request.query);
-    const weekDay = dayjs(date).get("day");
+    const parseDate = dayjs(date).startOf("day");
+    const weekDay = parseDate.get("day");
 
     console.log(date);
     console.log(weekDay);
@@ -56,8 +57,22 @@ export async function AppRoutes(app: FastifyInstance) {
       },
     });
 
+    const day = await prisma.day.findUnique({
+      where: {
+        date: parseDate.toDate(),
+      },
+      include: {
+        dayHabits: true,
+      },
+    });
+
+    const completedHabits = day?.dayHabits.map((dayHabit) => {
+      return dayHabit.habit_id;
+    });
+
     return {
       possibleHabits,
+      completedHabits,
     };
   });
 }
