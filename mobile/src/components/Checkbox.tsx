@@ -26,7 +26,7 @@ export function Checkbox({ title, checked = false, ...rest }: CheckBoxProps) {
       ) : (
         <View className="w-8 h-8 bg-zinc-900 rounded-lg " />
       )}
-      <Text className="text-white ml-3 text-base">{title}</Text>
+      <Text className="text-white ml-3 text-base font-semibold">{title}</Text>
     </TouchableOpacity>
   );
 }
